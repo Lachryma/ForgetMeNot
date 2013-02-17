@@ -1,7 +1,6 @@
 package com.redevs.forgetmenot.sqlite;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.redevs.forgetmenot.classes.Contact;
 
@@ -88,8 +87,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
      
     // Getting All Contacts
-    public List<Contact> getAllContacts() {
-    	List<Contact> contactList = new ArrayList<Contact>();
+    public ArrayList<Contact> getAllContacts() {
+    	ArrayList<Contact> contactList = new ArrayList<Contact>();
     	//Select All Query
     	String selectQuery = "SELECT * FROM " + TABLE_CONTACTS;
     	

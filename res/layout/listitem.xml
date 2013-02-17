@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <ImageView
+        android:id="@+id/messageImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:contentDescription="@string/SMSImageDesc"
+        android:src="@drawable/list_view_sms" />
+
+    <ImageView
+        android:id="@+id/callImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/messageImage"
+        android:contentDescription="@string/callImageDesc"
+        android:src="@drawable/list_view_call" />
+
+    <ImageView
+        android:id="@+id/expandImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/expanderImageDesc"
+        android:src="@drawable/list_view_group_expand" />
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/expandImage"
+        android:layout_centerVertical="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>
