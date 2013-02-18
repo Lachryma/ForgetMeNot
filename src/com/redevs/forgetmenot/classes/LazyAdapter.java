@@ -2,13 +2,12 @@ package com.redevs.forgetmenot.classes;
 
 import java.util.ArrayList;
 
+import com.redevs.forgetmenot.MainActivity;
 import com.redevs.forgetmenot.R;
+import com.redevs.forgetmenot.globals.Globals;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,12 @@ import android.widget.TextView;
 
 public class LazyAdapter extends BaseAdapter {
 
-	private Activity activity;
+	private MainActivity activity;
 	private ArrayList<Contact> data;
 	private static LayoutInflater inflater = null;
-
 	private static final String TAG = "ADAPTER";
 	
-	public LazyAdapter(Activity a, ArrayList<Contact> d, AlertDialog.Builder b) {
+	public LazyAdapter(MainActivity a, ArrayList<Contact> d, AlertDialog.Builder b) {
 		activity = a;
 		data = d;
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,9 +86,7 @@ public class LazyAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Contact contactTag = (Contact) v.getTag();
-				Log.d(TAG, "Call for " + contactTag.getName());
-				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"
-						+ contactTag.getPhoneNumber())));
+				activity.makeDialog(Globals.CALL_DIALOG, contactTag);
 			}
 			
 		});
@@ -100,9 +96,7 @@ public class LazyAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Contact contactTag = (Contact) v.getTag();
-				Log.d(TAG, "Message for " + contactTag.getName());
-				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-                        + contactTag.getPhoneNumber())));
+				activity.makeDialog(Globals.SMS_DIALOG, contactTag);
 			}
 			
 		});

@@ -2,9 +2,9 @@ package com.redevs.forgetmenot;
 
 import java.util.ArrayList;
 
-import com.redevs.forgetmenot.classes.Contact;
-import com.redevs.forgetmenot.classes.LazyAdapter;
+import com.redevs.forgetmenot.classes.*;
 import com.redevs.forgetmenot.sqlite.DatabaseHandler;
+import com.redevs.forgetmenot.globals.Globals;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -20,6 +20,8 @@ public class MainActivity extends Activity {
 	ListView listLayout_;
 	LazyAdapter adapter;
 	AlertDialog.Builder builder;
+	DialogOnClickListener listener;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends Activity {
 
     	builder = new AlertDialog.Builder(this);
     	
-    	adapter = new LazyAdapter(this, contactList, builder);
+    	adapter = new LazyAdapter(MainActivity.this, contactList, builder);
     	listLayout_.setAdapter(adapter);
     	
     }
@@ -82,8 +84,32 @@ public class MainActivity extends Activity {
     	makeToast("Menu Settings Pressed");
     } 
     
-    private void makeToast(String str){
+    public void makeToast(String str){
 		Toast toast = Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT);
 		toast.show();
     }  
+    
+    public void makeDialog(int type, Contact c){
+		String message = null, positiveButton = "Okay", title = null, negativeButton = "Cancel";
+    	switch(type){
+    	case Globals.CALL_DIALOG:
+    		message = "Do you wish to call " + c.getName() + "?";
+    		title = "Call";
+        	builder.setPositiveButton(positiveButton, new DialogOnClickListener(Globals.CALL_DIALOG, Globals.DIALOG_POSITIVE, c, this));
+        	builder.setNegativeButton(negativeButton, new DialogOnClickListener(Globals.CALL_DIALOG, Globals.DIALOG_NEGATIVE, c, this));
+        	break;
+    	case Globals.SMS_DIALOG:
+    		message = "Do you wish to SMS " + c.getName() + "?";
+    		title = "SMS";
+        	builder.setPositiveButton(positiveButton, new DialogOnClickListener(Globals.SMS_DIALOG, Globals.DIALOG_POSITIVE, c, this));
+        	builder.setNegativeButton(negativeButton, new DialogOnClickListener(Globals.SMS_DIALOG, Globals.DIALOG_NEGATIVE, c, this));
+        	break;
+    	}
+    	
+    	builder.setTitle(title);
+    	builder.setMessage(message);
+    	
+    	builder.show();
+    	
+    }
 }
