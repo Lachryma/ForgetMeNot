@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 	LazyAdapter adapter;
 	AlertDialog.Builder builder;
 	DialogOnClickListener listener;
+	ArrayList<Contact> contactList;
+	DatabaseHandler db = new DatabaseHandler(this);
 	
 	
     @Override
@@ -28,7 +30,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        DatabaseHandler db = new DatabaseHandler(this);
         // Insert Dummy Contacts
         Log.d("Insert: ", "Inserting ..");
         db.addContact(new Contact(0, "Kyle Dausin", "9100000000", "12/12/2012", "12/12/2012"));
@@ -36,16 +37,23 @@ public class MainActivity extends Activity {
         db.addContact(new Contact(2, "Brian Voorhees", "9522222222", "12/12/2012", "12/12/2012"));
         db.addContact(new Contact(3, "Dan Rolph", "9533333333", "12/12/2012", "12/12/2012"));
         
-        listLayout_ = (ListView) findViewById(R.id.contactList);
-        
-    	ArrayList<Contact> contactList = db.getAllContacts();
-
-    	builder = new AlertDialog.Builder(this);
-    	
-    	adapter = new LazyAdapter(MainActivity.this, contactList, builder);
-    	listLayout_.setAdapter(adapter);
-    	
+        populateUI();
+            	
     }
+
+	private void populateUI() {
+		
+		listLayout_ = (ListView) findViewById(R.id.contactList);
+		
+		db = new DatabaseHandler(this);
+		contactList = db.getAllContacts();
+		Globals.contactCount = contactList.size();
+		
+		builder = new AlertDialog.Builder(this);
+		adapter = new LazyAdapter(MainActivity.this, contactList, builder);
+		listLayout_.setAdapter(adapter);
+		
+	}
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,7 +81,11 @@ public class MainActivity extends Activity {
     
     private void menuAdd(){
     	makeToast("Menu Add Pressed");
-    	
+    	Contact c = new Contact(Globals.contactCount, "KC Smith", "9998675309", "12/12/2012", "12/12/2012");
+    	db.addContact(c);
+    	contactList = db.getAllContacts();
+    	Globals.contactCount = contactList.size();
+    	adapter.add(c);
     }
     
     private void menuRemove(){
@@ -89,8 +101,17 @@ public class MainActivity extends Activity {
 		toast.show();
     }  
     
+    public void makeListDialog(int position, Contact c){
+    	String title = c.getName();
+    	String[] items = {"Delete", "Edit"};
+    	builder.setItems(items, new ListDialogOnClickListener(adapter, c, position, this));
+    	builder.setTitle(title);
+    	
+    	builder.show();
+    }
+    
     public void makeDialog(int type, Contact c){
-		String message = null, positiveButton = "Okay", title = null, negativeButton = "Cancel";
+		String message = null, title = null, positiveButton = "Okay", negativeButton = "Cancel";
     	switch(type){
     	case Globals.CALL_DIALOG:
     		message = "Do you wish to call " + c.getName() + "?";

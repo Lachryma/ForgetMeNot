@@ -33,6 +33,12 @@ public class DialogOnClickListener implements DialogInterface.OnClickListener {
 		                        + c.getPhoneNumber())));
 	            	dialog.dismiss();
 	            	break;
+	            case Globals.DELETE_DIALOG:
+	            	if(type == Globals.DIALOG_POSITIVE){
+	            		activity.makeToast("Remove");
+	            	}
+	            	dialog.dismiss();
+	            	break;
 	            }
 	        }
 

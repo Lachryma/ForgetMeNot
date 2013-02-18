@@ -1,6 +1,7 @@
 package com.redevs.forgetmenot.classes;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import com.redevs.forgetmenot.MainActivity;
 import com.redevs.forgetmenot.R;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -44,6 +46,16 @@ public class LazyAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
+	
+	public void add(Contact c){
+		data.add(c);
+		notifyDataSetChanged();
+	}
+	
+	public void remove(int position){
+		data.remove(position);
+		notifyDataSetChanged();
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -65,9 +77,26 @@ public class LazyAdapter extends BaseAdapter {
 		
 		//Set Values and Tags
 		name.setText(c.getName());
+		Hashtable<Object, Object> table = new Hashtable<Object, Object>();
+		table.put(0, c);
+		table.put(1, position);
+		vi.setTag(table);
 		caller.setTag(c);
 		expander.setTag(c);
 		messager.setTag(c);
+		
+		vi.setOnLongClickListener(new OnLongClickListener(){
+
+			@Override
+			public boolean onLongClick(View v) {
+				Hashtable<Object, Object> table = (Hashtable<Object, Object>) v.getTag();
+				Contact contactTag = (Contact) table.get(0);
+				int pos = (Integer) table.get(1);
+				activity.makeListDialog(pos, contactTag);
+				return false;
+			}
+			
+		});
 		
 		
 		
